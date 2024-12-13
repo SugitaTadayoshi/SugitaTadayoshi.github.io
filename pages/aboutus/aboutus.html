@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Erovra Club</title>
+  <link rel="stylesheet" href="../../style.css">
+  <!-- React Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <!-- Add Babel for JSX support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+</head>
+<body>
+  <div id="header-container"></div>
+  <script src="../../header-include.js"></script>
+
+  <main>
+    <section class="about-us-section">
+      <h1>About Erovra Club</h1>
+      <div id="about-us-slider"></div>
+    </section>
+  </main>
+
+  <!-- First load the component -->
+  <script src="../../components/AboutUsSlider.js" type="text/babel"></script>
+  
+  <!-- Then initialize it -->
+  <script type="text/babel">
+    const root = ReactDOM.createRoot(document.getElementById('about-us-slider'));
+    root.render(
+      <React.StrictMode>
+        <AboutUsSlider />
+      </React.StrictMode>
+    );
+  </script>
+</body>
+</html>

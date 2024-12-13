@@ -1,0 +1,86 @@
+.coaches-section {
+    padding: 60px;
+  }
+  
+  .coaches-section h1 {
+    font-size: 32px;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .coach-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .coach-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .coach-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .coach-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .coach-overlay h3 {
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+  }
+  
+  .coach-image-container:hover .coach-overlay {
+    opacity: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    .coaches-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .coaches-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    .coaches-section {
+      padding: 30px;
+    }
+  }
