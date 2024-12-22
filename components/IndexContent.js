@@ -18,7 +18,7 @@ const IndexContent = () => {
   const content = {
     about: {
       title: "About Us",
-      text: "Welcome to Erovra Club, where we believe that every step taken is a stride towards conquering personal challenges and achieving greatness. Established in 2016, Erovra Club is more than just a running club; it is a community dedicated to fostering family-oriented experiences that empower individuals to pursue their goals and surpass their limits.",
+      text: "Welcome to Erovra Club, \n Where we believe that every step taken is a stride towards conquering personal challenges and achieving greatness. \n\n Established in 2016, Erovra Club is more than just a running club; \n It is a community dedicated to fostering family-oriented experiences that empower individuals to pursue their goals and surpass their limits.",
       icon: (isActive) => (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
           <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
