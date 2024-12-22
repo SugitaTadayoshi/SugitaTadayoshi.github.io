@@ -1,51 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Erovra Club</title>
-  <link rel="stylesheet" href="../../style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Locations</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        /* Previous styles remain the same */
+        body {
+            background-color: #000000;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+        #markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .location-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 10;
+        }
+        .marker-dot {
+            width: 12px;
+            height: 12px;
+            background: #DAA520;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .marker-dot.active {
+            background: #3B82F6;
+        }
+        .marker-ring {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #DAA520;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+            transition: border-color 0.3s ease;
+        }
+        .marker-ring.active {
+            border-color: #3B82F6;
+        }
+        .location-info {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #DAA520;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            display: none;
+            z-index: 20;
+            width: 280px;
+            transform: translate(-50%, -120%);
+            pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        .location-info.active {
+            display: block;
+            border-color: #3B82F6;
+            pointer-events: auto;
+        }
+        .location-image {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .location-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen">
+    <!-- Header Container -->
     <div id="header-container"></div>
-    <script src="/header-include.js"></script>
+    <script src="../../header-include.js"></script>
 
-  <main>
-    <section class="training-details">
-      <h1>Training Details</h1>
-      <div class="training-cards">
-        <div class="training-card">
-          <div class="training-image">
-            <img src="bedok.jpg" alt="Bedok Stadium">
-          </div>
-          <div class="training-content">
-            <h2>Bedok Stadium</h2>
-            <p>Wednesday 6.30pm
-              <br>Saturday 8.00am</p>
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-[#DAA520] text-center mb-4">TRAINING LOCATIONS</h1>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <img src="singaporemap.png" id="mapImage" alt="Singapore Satellite Map" class="map-image">
+            <div id="markers"></div>
+        </div>
+    </div>
+
+    <script>
+        const stadiums = [
+            {
+                name: "Yio Chu Kang Stadium",
+                coordinates: { lat: 1.3715, lng: 103.8251 },
+                address: "200 Ang Mo Kio Avenue 9, Singapore 569770",
+                schedule: "Wednesday 6.30pm",
+                image: "yck.jpg"
+            },
+            {
+                name: "Bishan Stadium",
+                coordinates: { lat: 1.3546, lng: 103.8270 },
+                address: "5 Bishan Street 14, Singapore 579783",
+                schedule: "Wednesday 6.30pm\nSaturday 9.00am",
+                image: "bishan.jpg"
+            },
+            {
+                name: "Bedok Stadium",
+                coordinates: { lat: 1.3426, lng: 103.9073 },
+                address: "3 Bedok North Street 2, Singapore 469643",
+                schedule: "Wednesday 6.30pm\nSaturday 8.00am",
+                image: "bedok.jpg"
+            }
+        ];
+
+        const bounds = {
+            north: 1.4705,
+            south: 1.2298,
+            east: 103.9859,
+            west: 103.6057
+        };
+
+        let currentlyActive = null;
+
+        function calculateImagePosition(lat, lng) {
+            const x = ((lng - bounds.west) / (bounds.east - bounds.west)) * 100;
+            const y = ((bounds.north - lat) / (bounds.north - bounds.south)) * 100;
+            return { x, y };
+        }
+
+        function deactivateMarker(marker, info) {
+            marker.querySelector('.marker-dot').classList.remove('active');
+            marker.querySelector('.marker-ring').classList.remove('active');
+            info.classList.remove('active');
+        }
+
+        function activateMarker(marker, info) {
+            marker.querySelector('.marker-dot').classList.add('active');
+            marker.querySelector('.marker-ring').classList.add('active');
+            info.classList.add('active');
+        }
+
+        function createMarker(stadium) {
+            const pos = calculateImagePosition(stadium.coordinates.lat, stadium.coordinates.lng);
             
-          </div>
-        </div>
-        <div class="training-card">
-          <div class="training-image">
-            <img src="bishan.jpg" alt="Bishan Stadium">
-          </div>
-          <div class="training-content">
-            <h2>Bishan Stadium</h2>
-            <p>Wednesday 6.30pm
-              <br>Saturday 9.00am</p>
-          </div>
-        </div>
-        <div class="training-card">
-          <div class="training-image">
-            <img src="yck.jpg" alt="Yio Chu Kang Stadium">
-          </div>
-          <div class="training-content">
-            <h2>Yio Chu Kang Stadium</h2>
-            <p>Wednesday 6.30pm</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+            const marker = document.createElement('div');
+            marker.className = 'location-marker';
+            marker.style.left = `${pos.x}%`;
+            marker.style.top = `${pos.y}%`;
+            marker.innerHTML = `
+                <div class="marker-dot"></div>
+                <div class="marker-ring"></div>
+            `;
+            
+            const info = document.createElement('div');
+            info.className = 'location-info';
+            info.style.left = `${pos.x}%`;
+            info.style.top = `${pos.y}%`;
+            info.innerHTML = `
+                <div class="location-image">
+                    <img src="${stadium.image}" alt="${stadium.name}">
+                </div>
+                <h3 class="text-[#DAA520] font-bold text-lg mb-2">${stadium.name}</h3>
+                <p class="text-sm text-gray-300 mb-2">${stadium.address}</p>
+                <p class="text-sm font-semibold text-white">${stadium.schedule.replace('\n', '<br>')}</p>
+            `;
+
+            marker.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                if (currentlyActive) {
+                    deactivateMarker(currentlyActive.marker, currentlyActive.info);
+                }
+
+                if (currentlyActive && 
+                    currentlyActive.marker === marker && 
+                    currentlyActive.info === info) {
+                    // If clicking the same marker, just deactivate it
+                    currentlyActive = null;
+                } else {
+                    // Activate the new marker
+                    activateMarker(marker, info);
+                    currentlyActive = { marker, info };
+                }
+            });
+            
+            return { marker, info };
+        }
+
+        function initializeMarkers() {
+            const markersContainer = document.getElementById('markers');
+            markersContainer.innerHTML = '';
+            currentlyActive = null;
+            
+            stadiums.forEach(stadium => {
+                const { marker, info } = createMarker(stadium);
+                markersContainer.appendChild(marker);
+                markersContainer.appendChild(info);
+            });
+
+            // Close tooltips when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.location-marker') && !e.target.closest('.location-info')) {
+                    if (currentlyActive) {
+                        deactivateMarker(currentlyActive.marker, currentlyActive.info);
+                        currentlyActive = null;
+                    }
+                }
+            });
+        }
+
+        document.getElementById('mapImage').onload = initializeMarkers;
+        
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(initializeMarkers, 100);
+        });
+    </script>
 </body>
 </html>

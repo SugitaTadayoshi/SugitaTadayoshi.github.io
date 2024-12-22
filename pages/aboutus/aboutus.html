@@ -1,38 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us - Erovra Club</title>
-  <link rel="stylesheet" href="../../style.css">
-  <!-- React Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <!-- Add Babel for JSX support -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Erovra Club</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body { 
+            background-color: black;
+            color: white;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slider-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slider-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <div id="header-container"></div>
-  <script src="../../header-include.js"></script>
+    <div id="header-container"></div>
+    <script src="../../header-include.js"></script>
 
-  <main>
-    <section class="about-us-section">
-      <h1>About Erovra Club</h1>
-      <div id="about-us-slider"></div>
-    </section>
-  </main>
+    <main class="container mx-auto px-4 py-12">
+        <h1 class="text-5xl font-bold text-center mb-8 fade-in"
+            style="color: #DAA520; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+            Welcome to Erovra Club
+        </h1>
+        
+        <div id="typing-content"></div>
+    </main>
 
-  <!-- First load the component -->
-  <script src="../../components/AboutUsSlider.js" type="text/babel"></script>
-  
-  <!-- Then initialize it -->
-  <script type="text/babel">
-    const root = ReactDOM.createRoot(document.getElementById('about-us-slider'));
-    root.render(
-      <React.StrictMode>
-        <AboutUsSlider />
-      </React.StrictMode>
-    );
-  </script>
+    <script type="text/babel">
+        const AboutUsContent = () => {
+            const [text, setText] = React.useState('');
+            const [currentLineIndex, setCurrentLineIndex] = React.useState(0);
+            const [completedLines, setCompletedLines] = React.useState([]);
+            const [typingComplete, setTypingComplete] = React.useState(false);
+            const [activeTab, setActiveTab] = React.useState('mission');
+
+            const lines = [
+                "Where we believe that every step taken is a stride towards conquering personal challenges and achieving greatness.",
+                "Established in 2016, Erovra Club is more than just a running club;",
+                "It is a community dedicated to fostering family-oriented experiences that empower individuals to pursue their goals and surpass their limits."
+            ];
+
+            const content = {
+                mission: {
+                    title: "Our Mission",
+                    text: "At Erovra Club, our mission is simple yet profound: To provide a supportive environment for families and individuals alike, encouraging them to experience the thrill of overcoming challenges. We are committed to helping our members set ambitious goals and achieve them through camaraderie, training, and shared experiences."
+                },
+                vision: {
+                    title: "Our Vision",
+                    text: "Erovra, which translates to 'conqueror' in Swedish, embodies our vision of providing a platform where athletes can excel and conquer their fears. We envision a future where every member has the opportunity to unlock their full potential, families come together through shared athletic pursuits, and challenges are met with resilience and determination."
+                },
+                values: {
+                    title: "Our Values",
+                    text: "• Community: We prioritize building strong relationships among our members\n• Empowerment: We inspire each other to push beyond perceived limitations\n• Inclusivity: Everyone is welcome at Erovra Club, regardless of skill level\n• Wellness: We promote physical health as an integral part of personal growth"
+                }
+            };
+
+            React.useEffect(() => {
+                if (currentLineIndex < lines.length) {
+                    let currentIndex = 0;
+                    const interval = setInterval(() => {
+                        if (currentIndex <= lines[currentLineIndex].length) {
+                            setText(lines[currentLineIndex].substring(0, currentIndex));
+                            currentIndex++;
+                        } else {
+                            clearInterval(interval);
+                            setCompletedLines(prev => [...prev, lines[currentLineIndex]]);
+                            setText('');
+                            if (currentLineIndex === lines.length - 1) {
+                                setTypingComplete(true);
+                            } else {
+                                setCurrentLineIndex(prev => prev + 1);
+                            }
+                        }
+                    }, 30);
+
+                    return () => clearInterval(interval);
+                }
+            }, [currentLineIndex]);
+
+            return (
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        {completedLines.map((line, index) => (
+                            <p key={index} className="text-xl text-gray-300 mb-4">
+                                {line}
+                            </p>
+                        ))}
+                        {currentLineIndex < lines.length && (
+                            <p className="text-xl text-gray-300 mb-4">
+                                {text}
+                                <span className="inline-block w-2 h-5 ml-1 bg-white animate-pulse"/>
+                            </p>
+                        )}
+                    </div>
+
+                    <div className={`slider-section ${typingComplete ? 'visible' : ''}`}>
+                        <div className="bg-gray-900 bg-opacity-50 rounded-lg p-8">
+                            <div className="flex flex-col md:flex-row gap-8">
+                                <div className="flex-grow">
+                                    <h2 className="text-2xl font-bold mb-4" style={{color: '#DAA520'}}>
+                                        {content[activeTab].title}
+                                    </h2>
+                                    <div className="text-gray-300 leading-relaxed whitespace-pre-line">
+                                        {content[activeTab].text}
+                                    </div>
+                                </div>
+
+                                <div className="flex md:flex-col gap-4 justify-center">
+                                    {Object.keys(content).map((tab) => (
+                                        <button
+                                            key={tab}
+                                            onClick={() => setActiveTab(tab)}
+                                            className={`w-16 h-16 rounded-full transition-all duration-300
+                                                ${activeTab === tab 
+                                                    ? 'bg-[#DAA520] text-white' 
+                                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}`}
+                                        >
+                                            {tab[0].toUpperCase()}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Initialize React
+        const root = ReactDOM.createRoot(document.getElementById('typing-content'));
+        root.render(<AboutUsContent />);
+    </script>
 </body>
 </html>
