@@ -332,3 +332,19 @@ main p {
     margin: 0 auto;
   }
 }
+
+.definition-text {
+  font-family: monospace;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.word-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.part-of-speech {
+  font-style: italic;
+  color: #9ca3af;
+}

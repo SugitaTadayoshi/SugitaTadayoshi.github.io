@@ -1,17 +1,42 @@
-const AboutUsContent = () => {
-  const [text, setText] = React.useState("");
-  const [currentLineIndex, setCurrentLineIndex] = React.useState(0);
-  const [completedLines, setCompletedLines] = React.useState([]);
-  const [typingComplete, setTypingComplete] = React.useState(false);
-  const [activeContent, setActiveContent] = React.useState("mission");
+const React = window.React;
+const { useState, useEffect } = React;
+
+const IndexContent = () => {
+  const [text, setText] = useState("");
+  const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const [completedLines, setCompletedLines] = useState([]);
+  const [typingComplete, setTypingComplete] = useState(false);
+  const [activeContent, setActiveContent] = useState("about");
 
   const lines = [
-    "Where we believe that every step taken is a stride towards conquering personal challenges and achieving greatness.",
-    "Established in 2016, Erovra Club is more than just a running club;",
-    "It is a community dedicated to fostering family-oriented experiences that empower individuals to pursue their goals and surpass their limits.",
+    "erövra",
+    "*verb*",
+    "/²ẹːröːvra/",
+    "to win , to defeat , to conquer",
   ];
 
   const content = {
+    about: {
+      title: "About Us",
+      text: "Welcome to Erovra Club, where we believe that every step taken is a stride towards conquering personal challenges and achieving greatness. Established in 2016, Erovra Club is more than just a running club; it is a community dedicated to fostering family-oriented experiences that empower individuals to pursue their goals and surpass their limits.",
+      icon: (isActive) => (
+        <div style={{ width: "100%", height: "100%", position: "relative" }}>
+          <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
+            {/* 'i' dot */}
+            <circle cx="50" cy="30" r="4" fill="currentColor" />
+            {/* 'i' body */}
+            <rect
+              x="46"
+              y="40"
+              width="8"
+              height="35"
+              rx="4"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+      ),
+    },
     mission: {
       title: "Our Mission",
       text: "At Erovra Club, our mission is simple yet profound: To provide a supportive environment for families and individuals alike, encouraging them to experience the thrill of overcoming challenges. We are committed to helping our members set ambitious goals and achieve them through camaraderie, training, and shared experiences.",
@@ -149,7 +174,7 @@ const AboutUsContent = () => {
     },
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentLineIndex < lines.length) {
       let currentIndex = 0;
       const interval = setInterval(() => {
@@ -172,7 +197,6 @@ const AboutUsContent = () => {
     }
   }, [currentLineIndex]);
 
-  // Slider content
   const sliderSection = (
     <div className={`slider-section ${typingComplete ? "visible" : ""}`}>
       <div className="bg-gray-900 bg-opacity-50 rounded-lg p-8">
@@ -187,7 +211,7 @@ const AboutUsContent = () => {
           </div>
 
           <div className="flex md:flex-col gap-4 justify-center">
-            {Object.entries(content).map(([key, content]) => (
+            {Object.entries(content).map(([key, item]) => (
               <button
                 key={key}
                 onMouseEnter={() => setActiveContent(key)}
@@ -207,7 +231,7 @@ const AboutUsContent = () => {
                   position: "relative",
                 }}
               >
-                {content.icon(activeContent === key)}
+                {item.icon(activeContent === key)}
               </button>
             ))}
           </div>
@@ -220,14 +244,22 @@ const AboutUsContent = () => {
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-16">
         {completedLines.map((line, index) => (
-          <p key={index} className="text-xl text-gray-300 mb-4">
+          <p
+            key={index}
+            className={`definition-text mb-2 ${
+              index === 0 ? "word-text" : ""
+            } ${index === 1 ? "part-of-speech" : ""}`}
+          >
             {line}
           </p>
         ))}
         {currentLineIndex < lines.length && (
-          <p className="text-xl text-gray-300 mb-4">
+          <p className="definition-text mb-2">
             {text}
-            <span className="inline-block w-2 h-5 ml-1 bg-white animate-pulse" />
+            {currentLineIndex < lines.length - 1 &&
+              text.length < lines[currentLineIndex].length && (
+                <span className="inline-block w-2 h-5 ml-1 bg-white animate-pulse" />
+              )}
           </p>
         )}
       </div>
@@ -236,4 +268,4 @@ const AboutUsContent = () => {
   );
 };
 
-export default AboutUsContent;
+window.IndexContent = IndexContent;
