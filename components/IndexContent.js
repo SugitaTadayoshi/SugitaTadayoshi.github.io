@@ -11,7 +11,7 @@ const IndexContent = () => {
   const lines = [
     "erövra",
     "*verb*",
-    "/²ẹːröːvra/",
+    "/²ẹ:rö:vra/",
     "to win , to defeat , to conquer",
   ];
 
