@@ -377,12 +377,13 @@ nav ul li {
   position: relative;
 }
 
-nav a {
+nav a, nav span {
   color: #fff;
   text-decoration: none;
   font-size: 16px;
   padding: 8px 0;
   position: relative;
+  cursor: pointer;
 }
 
 nav a:hover {
