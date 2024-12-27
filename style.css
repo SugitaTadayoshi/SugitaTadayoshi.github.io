@@ -417,14 +417,18 @@ nav a:hover::after {
   transform: translateX(-50%);
   background-color: #000000;
   min-width: 150px;
-  padding: 10px 0;
-  margin-top: 10px;
+  margin-top: 0;
+  padding: 20px 0;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .has-dropdown:hover .dropdown-menu {
   display: block;
+}
+
+.has-dropdown {
+  padding-bottom: 20px;
 }
 
 .dropdown-menu li {
@@ -436,4 +440,5 @@ nav a:hover::after {
   white-space: nowrap;
   display: block;
   padding: 8px 20px;
+  text-align: center;
 }
