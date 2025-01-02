@@ -1,18 +1,16 @@
 <!-- header.html -->
-<header class="mobile-header">
-  <div class="mobile-header-container">
-    <div class="header-logo">
-      <a href="/index.html">
-        <img src="/images/weblogo.png" alt="Erovra Club Logo">
-      </a>
-    </div>
-    
-    <button class="menu-toggle" aria-label="Toggle navigation menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+<header>
+  <div class="header-logo">
+    <a href="/index.html">
+      <img src="/images/weblogo.png" alt="Erovra Club Logo">
+    </a>
   </div>
+  
+  <button class="menu-toggle" aria-label="Toggle navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
   
   <nav>
     <ul class="nav-menu">
@@ -36,7 +34,6 @@ document.querySelector('.menu-toggle').addEventListener('click', function() {
   document.body.classList.toggle('nav-open');
 });
 
-// Close mobile menu when clicking outside
 document.addEventListener('click', function(e) {
   const nav = document.querySelector('nav');
   const toggle = document.querySelector('.menu-toggle');
@@ -48,7 +45,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Handle Events dropdown on mobile
 document.querySelector('.has-dropdown span').addEventListener('click', function(e) {
   if (window.innerWidth <= 768) {
     e.preventDefault();
