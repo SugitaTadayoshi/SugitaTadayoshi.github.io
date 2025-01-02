@@ -28,14 +28,17 @@
 </header>
 
 <div id="menuOverlay" class="menu-overlay"></div>
-<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-<script type="text/babel">
-  document.addEventListener('DOMContentLoaded', function() {
+
+<script>
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all required elements
   const menuToggle = document.getElementById('menuToggle');
   const mainNav = document.getElementById('mainNav');
   const menuOverlay = document.getElementById('menuOverlay');
   const dropdowns = document.querySelectorAll('.dropdown');
 
+  // Function to close the menu
   function closeMenu() {
     mainNav.classList.remove('active');
     menuToggle.classList.remove('active');
@@ -44,6 +47,7 @@
     dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
   }
 
+  // Function to open the menu
   function openMenu() {
     mainNav.classList.add('active');
     menuToggle.classList.add('active');
@@ -51,8 +55,8 @@
     document.body.classList.add('menu-open');
   }
 
-  // Toggle menu
-  menuToggle.addEventListener('click', (e) => {
+  // Add click event to menu toggle button
+  menuToggle.addEventListener('click', function(e) {
     e.stopPropagation();
     if (mainNav.classList.contains('active')) {
       closeMenu();
@@ -62,19 +66,21 @@
   });
 
   // Handle dropdowns
-  dropdowns.forEach(dropdown => {
+  dropdowns.forEach(function(dropdown) {
     const button = dropdown.querySelector('.dropdown-button');
     
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
       
       if (window.innerWidth <= 768) {
-        dropdowns.forEach(other => {
+        // Close other dropdowns
+        dropdowns.forEach(function(other) {
           if (other !== dropdown) {
             other.classList.remove('active');
           }
         });
+        // Toggle current dropdown
         dropdown.classList.toggle('active');
       }
     });
@@ -84,7 +90,7 @@
   menuOverlay.addEventListener('click', closeMenu);
 
   // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e) {
     if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
       closeMenu();
     }
@@ -92,13 +98,13 @@
 
   // Handle window resize
   let resizeTimer;
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
+    resizeTimer = setTimeout(function() {
       if (window.innerWidth > 768) {
         closeMenu();
       }
     }, 250);
   });
 });
-  </script>
+</script>
