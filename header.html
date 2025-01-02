@@ -1,17 +1,19 @@
-
+<!-- header.html -->
 <header>
   <div class="header-logo">
     <a href="/index.html">
       <img src="/images/weblogo.png" alt="Erovra Club Logo">
     </a>
   </div>
+  
   <button class="menu-toggle" aria-label="Toggle navigation menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
+  
   <nav>
-    <ul>
+    <ul class="nav-menu">
       <li><a href="/pages/training/training.html">Training</a></li>
       <li><a href="/pages/coaches/coaches.html">Coaches</a></li>
       <li class="has-dropdown">
@@ -29,6 +31,19 @@
 document.querySelector('.menu-toggle').addEventListener('click', function() {
   document.querySelector('nav').classList.toggle('active');
   this.classList.toggle('active');
+  document.body.classList.toggle('nav-open');
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(e) {
+  const nav = document.querySelector('nav');
+  const toggle = document.querySelector('.menu-toggle');
+  
+  if (!nav.contains(e.target) && !toggle.contains(e.target) && nav.classList.contains('active')) {
+    nav.classList.remove('active');
+    toggle.classList.remove('active');
+    document.body.classList.remove('nav-open');
+  }
 });
 
 // Handle Events dropdown on mobile
@@ -37,5 +52,15 @@ document.querySelector('.has-dropdown span').addEventListener('click', function(
     e.preventDefault();
     this.parentElement.classList.toggle('active');
   }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dropdowns = document.querySelectorAll('.has-dropdown');
+  dropdowns.forEach(dropdown => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('active');
+    }
+  });
 });
 </script>
