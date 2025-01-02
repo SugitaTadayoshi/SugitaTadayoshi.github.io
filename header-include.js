@@ -1,6 +1,6 @@
 // header-include.js
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("../../header.html") // Adjust the path to go up two levels
+  fetch("../../header.html")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -8,7 +8,29 @@ document.addEventListener("DOMContentLoaded", function () {
       return response.text();
     })
     .then((data) => {
-      document.getElementById("header-container").innerHTML = data;
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = data;
+
+      // Extract and append styles
+      const styles = tempDiv.querySelector("style");
+      if (styles) {
+        document.head.appendChild(styles.cloneNode(true));
+      }
+
+      // Extract and append header content
+      const header = tempDiv.querySelector("header");
+      if (header) {
+        document.getElementById("header-container").innerHTML =
+          header.outerHTML;
+      }
+
+      // Extract and execute scripts
+      const scripts = tempDiv.querySelector("script");
+      if (scripts) {
+        const newScript = document.createElement("script");
+        newScript.textContent = scripts.textContent;
+        document.body.appendChild(newScript);
+      }
 
       // Update active state for current page
       const currentPath = window.location.pathname;

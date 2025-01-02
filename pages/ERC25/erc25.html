@@ -3,42 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERC25 - Erovra Club</title>
+    <title>Erovra Relay Championship 2025</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <link rel="stylesheet" href="../../style.css">
     <style>
-        .event-poster {
+        .event-banner {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .event-poster img {
+        .event-banner img {
             width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .event-content {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+        .content-wrapper {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-top: -30px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-black">
     <div id="header-container"></div>
     <script src="../../header-include.js"></script>
 
-    <main>
-        <div class="event-poster">
-            <img src="eventposter.png" alt="ERC25 Event Poster">
+    <main class="container mx-auto px-4 pt-28 pb-12">
+        <div class="event-banner">
+            <img src="eventposter.png" alt="Erovra Relay Championship 2025" />
         </div>
         
-        <div class="event-content">
-            <!-- Additional event content can be added here -->
+        <div class="content-wrapper max-w-6xl mx-auto px-4">
+            <div id="event-details"></div>
         </div>
     </main>
+
+    <!-- Include ERC25Details component -->
+    <script type="text/babel" src="./ERC25Details.js"></script>
+    
+    <!-- React Rendering -->
+    <script type="text/babel">
+        const root = ReactDOM.createRoot(document.getElementById('event-details'));
+        root.render(<ERC25Details />);
+    </script>
 </body>
 </html>

@@ -1,80 +1,199 @@
 <!-- header.html -->
-<header>
+<header class="px-6 py-4 flex justify-between items-center bg-black fixed w-full top-0 z-50">
   <div class="header-logo">
-    <a href="/index.html">
-      <img src="/images/weblogo.png" alt="Erovra Club Logo">
-    </a>
+      <a href="/index.html">
+          <img src="/images/weblogo.png" alt="Erovra Club Logo">
+      </a>
   </div>
   
   <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu">
-    <span></span>
-    <span></span>
-    <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
   </button>
   
   <nav id="mainNav">
-    <ul class="nav-menu">
-      <li><a href="/pages/training/training.html">Training</a></li>
-      <li><a href="/pages/coaches/coaches.html">Coaches</a></li>
-      <li class="dropdown">
-        <button class="dropdown-button">Events <span class="arrow">▼</span></button>
-        <ul class="dropdown-content">
-          <li><a href="/pages/ERC25/erc25.html">ERC25</a></li>
-        </ul>
-      </li>
-      <li><a href="/pages/contact/contact.html">Contact Us</a></li>
-    </ul>
+      <ul class="nav-menu">
+          <li><a href="/pages/training/training.html">Training</a></li>
+          <li><a href="/pages/coaches/coaches.html">Coaches</a></li>
+          <li class="dropdown">
+              <button class="dropdown-button">Events <span>▼</span></button>
+              <div class="dropdown-content">
+                  <a href="/pages/ERC25/erc25.html">ERC25</a>
+              </div>
+          </li>
+          <li><a href="/pages/contact/contact.html">Contact Us</a></li>
+      </ul>
   </nav>
 </header>
+
+<style>
+  header {
+      z-index: 1000;
+      border: none !important;
+  }
+
+  .menu-toggle {
+      z-index: 1001;
+      display: none;
+  }
+
+  .nav-menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+  }
+
+  .dropdown-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+  }
+
+  .dropdown-content {
+      display: none;
+      background: rgba(0, 0, 0, 0.9);
+      min-width: 160px;
+      padding: 0;
+      margin: 0;
+  }
+
+  .dropdown.active .dropdown-content {
+      display: block;
+  }
+
+  @media (max-width: 768px) {
+      .menu-toggle {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          width: 30px;
+          height: 21px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          margin: 10px;
+      }
+
+      .menu-toggle span {
+          display: block;
+          width: 100%;
+          height: 3px;
+          background-color: white;
+          transition: all 0.3s linear;
+      }
+
+      .menu-toggle.active span:first-child {
+          transform: rotate(45deg) translate(6px, 6px);
+      }
+
+      .menu-toggle.active span:nth-child(2) {
+          opacity: 0;
+      }
+
+      .menu-toggle.active span:last-child {
+          transform: rotate(-45deg) translate(6px, -6px);
+      }
+
+      #mainNav {
+          position: fixed;
+          top: 60px;
+          right: -100%;
+          width: 250px;
+          height: auto;
+          background: rgba(0, 0, 0, 0.95);
+          padding: 2rem;
+          transition: 0.3s ease-in-out;
+          z-index: 998;
+      }
+
+      #mainNav.active {
+          right: 0;
+      }
+
+      .nav-menu {
+          flex-direction: column;
+          gap: 0;
+      }
+
+      .nav-menu li {
+          margin: 0;
+          padding: 0;
+      }
+
+      .nav-menu a, 
+      .dropdown-button {
+          display: block;
+          padding: 0.75rem 0;
+          width: 100%;
+          text-align: left;
+      }
+
+      .dropdown-content {
+          position: static;
+          background: transparent;
+          padding-left: 1rem;
+      }
+
+      .dropdown-content a {
+          padding: 0.5rem 0;
+      }
+
+      /* Only show padding when dropdown is active and has content */
+      .dropdown.active .dropdown-content:not(:empty) {
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+      }
+  }
+</style>
 
 <div id="menuOverlay" class="menu-overlay"></div>
 
 <script>
-(function() {
-  // Initialize after DOM is ready
-  function init() {
-    var menuToggle = document.getElementById('menuToggle');
-    var mainNav = document.getElementById('mainNav');
-    var menuOverlay = document.getElementById('menuOverlay');
-    var dropdowns = document.querySelectorAll('.dropdown');
+  (function() {
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      const dropdowns = document.querySelectorAll('.dropdown');
 
-    // Toggle menu on hamburger click
-    menuToggle.onclick = function(e) {
-      e.preventDefault();
-      mainNav.classList.toggle('active');
-      menuToggle.classList.toggle('active');
-      menuOverlay.classList.toggle('active');
-      document.body.classList.toggle('menu-open');
-    };
+      if (menuToggle && mainNav) {
+          menuToggle.addEventListener('click', function() {
+              this.classList.toggle('active');
+              mainNav.classList.toggle('active');
+          });
+      }
 
-    // Handle dropdown buttons
-    dropdowns.forEach(function(dropdown) {
-      var button = dropdown.querySelector('.dropdown-button');
-      button.onclick = function(e) {
-        e.preventDefault();
-        if (window.innerWidth <= 768) {
-          dropdown.classList.toggle('active');
-        }
-      };
-    });
-
-    // Close menu when clicking overlay
-    menuOverlay.onclick = function() {
-      mainNav.classList.remove('active');
-      menuToggle.classList.remove('active');
-      menuOverlay.classList.remove('active');
-      document.body.classList.remove('menu-open');
-      dropdowns.forEach(function(dropdown) {
-        dropdown.classList.remove('active');
+      dropdowns.forEach(dropdown => {
+          const button = dropdown.querySelector('.dropdown-button');
+          const content = dropdown.querySelector('.dropdown-content');
+          
+          // Only set up dropdown interaction if there are items
+          if (button && content && content.children.length > 0) {
+              button.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  dropdown.classList.toggle('active');
+              });
+          } else {
+              // Remove dropdown functionality if no items
+              button.style.cursor = 'default';
+              button.querySelector('span').style.display = 'none';
+          }
       });
-    };
-  }
 
-  // Run initialization
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
+      document.addEventListener('click', (e) => {
+          if (!e.target.closest('.dropdown')) {
+              dropdowns.forEach(dropdown => {
+                  dropdown.classList.remove('active');
+              });
+          }
+      });
+  })();
 </script>
