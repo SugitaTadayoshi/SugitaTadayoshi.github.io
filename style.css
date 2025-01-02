@@ -94,6 +94,15 @@ header {
   visibility: hidden;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  z-index: 1001;
+}
+
+@media (min-width: 769px) {
+  .dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 }
 
 .dropdown.active .dropdown-content {

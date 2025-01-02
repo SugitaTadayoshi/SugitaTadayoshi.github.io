@@ -30,74 +30,77 @@
 <div id="menuOverlay" class="menu-overlay"></div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menuToggle');
-    const mainNav = document.getElementById('mainNav');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const dropdowns = document.querySelectorAll('.dropdown');
-  
-    // Toggle mobile menu
-    menuToggle.addEventListener('click', () => {
-      menuToggle.classList.toggle('active');
-      mainNav.classList.toggle('active');
-      menuOverlay.classList.toggle('active');
-      document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
-      
-      // Close all dropdowns when toggling menu
-      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-    });
-  
-    // Handle dropdowns
-    dropdowns.forEach(dropdown => {
-      const button = dropdown.querySelector('.dropdown-button');
-      
-      // Handle both click and touch events
-      ['click', 'touchend'].forEach(eventType => {
-        button.addEventListener(eventType, (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          
-          // Close other dropdowns
-          dropdowns.forEach(other => {
-            if (other !== dropdown) {
-              other.classList.remove('active');
-            }
-          });
-          
-          dropdown.classList.toggle('active');
+
+console.log('Navigation script loaded');
+
+document.addEventListener('DOMContentLoaded', function() {
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const dropdowns = document.querySelectorAll('.dropdown');
+
+  // Toggle mobile menu
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    mainNav.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+    
+    // Close all dropdowns when toggling menu
+    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+  });
+
+  // Handle dropdowns
+  dropdowns.forEach(dropdown => {
+    const button = dropdown.querySelector('.dropdown-button');
+    
+    // Handle both click and touch events
+    ['click', 'touchend'].forEach(eventType => {
+      button.addEventListener(eventType, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Close other dropdowns
+        dropdowns.forEach(other => {
+          if (other !== dropdown) {
+            other.classList.remove('active');
+          }
         });
+        
+        dropdown.classList.toggle('active');
       });
     });
-  
-    // Close menu and dropdowns when clicking overlay
-    menuOverlay.addEventListener('click', () => {
-      mainNav.classList.remove('active');
-      menuToggle.classList.remove('active');
-      menuOverlay.classList.remove('active');
-      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-      document.body.style.overflow = '';
-    });
-  
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.dropdown')) {
-        dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-      }
-    });
-  
-    // Handle window resize
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (window.innerWidth > 768) {
-          mainNav.classList.remove('active');
-          menuToggle.classList.remove('active');
-          menuOverlay.classList.remove('active');
-          dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-          document.body.style.overflow = '';
-        }
-      }, 250);
-    });
   });
+
+  // Close menu and dropdowns when clicking overlay
+  menuOverlay.addEventListener('click', () => {
+    mainNav.classList.remove('active');
+    menuToggle.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+    document.body.style.overflow = '';
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+    }
+  });
+
+  // Handle window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (window.innerWidth > 768) {
+        mainNav.classList.remove('active');
+        menuToggle.classList.remove('active');
+        menuOverlay.classList.remove('active');
+        dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+        document.body.style.overflow = '';
+      }
+    }, 250);
+  });
+});
   </script>
