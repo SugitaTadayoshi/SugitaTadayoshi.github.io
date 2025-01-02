@@ -34,33 +34,40 @@
 console.log('Navigation script loaded');
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('Navigation script loading...'); // Debug log
+  
   const menuToggle = document.getElementById('menuToggle');
   const mainNav = document.getElementById('mainNav');
   const menuOverlay = document.getElementById('menuOverlay');
   const dropdowns = document.querySelectorAll('.dropdown');
-
-  // Toggle mobile menu
-  menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    mainNav.classList.toggle('active');
-    menuOverlay.classList.toggle('active');
-    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
-    
-    // Close all dropdowns when toggling menu
-    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-  });
+  
+  console.log('Menu toggle element:', menuToggle); // Debug log
+  
+  if (menuToggle) {
+    menuToggle.addEventListener('click', function(e) {
+      console.log('Menu toggle clicked'); // Debug log
+      e.preventDefault();
+      e.stopPropagation();
+      
+      this.classList.toggle('active');
+      mainNav.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+      
+      // Close all dropdowns when toggling menu
+      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+    });
+  }
 
   // Handle dropdowns
   dropdowns.forEach(dropdown => {
     const button = dropdown.querySelector('.dropdown-button');
     
-    // Handle both click and touch events
     ['click', 'touchend'].forEach(eventType => {
       button.addEventListener(eventType, (e) => {
         e.preventDefault();
         e.stopPropagation();
         
-        // Close other dropdowns
         dropdowns.forEach(other => {
           if (other !== dropdown) {
             other.classList.remove('active');
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Close menu and dropdowns when clicking overlay
+  // Close menu when clicking overlay
   menuOverlay.addEventListener('click', () => {
     mainNav.classList.remove('active');
     menuToggle.classList.remove('active');
@@ -81,10 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.overflow = '';
   });
 
-  // Close dropdowns when clicking outside
+  // Close menu when clicking outside
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.dropdown')) {
+    if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+      mainNav.classList.remove('active');
+      menuToggle.classList.remove('active');
+      menuOverlay.classList.remove('active');
       dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      document.body.style.overflow = '';
     }
   });
 
