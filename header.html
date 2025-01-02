@@ -28,68 +28,97 @@
 </header>
 
 <script>
-// Create overlay element
-const overlay = document.createElement('div');
-overlay.className = 'nav-overlay';
-document.body.appendChild(overlay);
+document.addEventListener('DOMContentLoaded', function() {
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
 
-// Menu toggle functionality
-document.querySelector('.menu-toggle').addEventListener('click', function() {
-  const nav = document.querySelector('nav');
-  this.classList.toggle('active');
-  nav.classList.toggle('active');
-  overlay.classList.toggle('active');
-  document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
-});
-
-// Close menu when clicking overlay
-overlay.addEventListener('click', function() {
-  const nav = document.querySelector('nav');
-  const toggle = document.querySelector('.menu-toggle');
-  nav.classList.remove('active');
-  toggle.classList.remove('active');
-  this.classList.remove('active');
-  document.body.style.overflow = '';
-});
-
-// Dropdown functionality for mobile
-document.querySelectorAll('.has-dropdown').forEach(dropdown => {
-  const dropdownToggle = dropdown.querySelector('span');
-  
-  if (window.innerWidth <= 768) {
-    dropdownToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropdown.classList.toggle('active');
+    // Menu toggle functionality
+    const menuToggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+        nav.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
     });
-  }
-});
 
-// Close menu when clicking outside
-document.addEventListener('click', function(e) {
-  const nav = document.querySelector('nav');
-  const toggle = document.querySelector('.menu-toggle');
-  
-  if (!nav.contains(e.target) && 
-      !toggle.contains(e.target) && 
-      nav.classList.contains('active')) {
-    nav.classList.remove('active');
-    toggle.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-});
+    // Dropdown functionality
+    const dropdowns = document.querySelectorAll('.has-dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        const dropdownToggle = dropdown.querySelector('span');
+        
+        dropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // If on mobile, toggle the dropdown
+            if (window.innerWidth <= 768) {
+                // Close all other open dropdowns
+                dropdowns.forEach(otherDropdown => {
+                    if (otherDropdown !== dropdown) {
+                        otherDropdown.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current dropdown
+                dropdown.classList.toggle('active');
+            }
+        });
+    });
 
-// Handle window resize
-window.addEventListener('resize', () => {
-  const nav = document.querySelector('nav');
-  const toggle = document.querySelector('.menu-toggle');
-  
-  if (window.innerWidth > 768 && nav.classList.contains('active')) {
-    nav.classList.remove('active');
-    toggle.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
+    // Close menu when clicking overlay
+    overlay.addEventListener('click', function() {
+        nav.classList.remove('active');
+        menuToggle.classList.remove('active');
+        this.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Close all dropdowns
+        dropdowns.forEach(dropdown => {
+            dropdown.classList.remove('active');
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!nav.contains(e.target) && 
+            !menuToggle.contains(e.target) && 
+            nav.classList.contains('active')) {
+            
+            nav.classList.remove('active');
+            menuToggle.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Close all dropdowns
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 768) {
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                // Close all dropdowns
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        }, 250);
+    });
 });
 </script>
