@@ -221,6 +221,7 @@ nav span {
 .dropdown-menu a {
     padding: 0.5rem 1rem;
 }
+}
 
 /* Small screen refinements */
 @media (max-width: 360px) {
