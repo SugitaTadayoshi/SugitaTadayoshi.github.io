@@ -6,19 +6,19 @@
     </a>
   </div>
   
-  <button class="menu-toggle" aria-label="Toggle navigation menu">
+  <button id="menuToggle" class="menu-toggle" aria-label="Toggle navigation menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
   
-  <nav>
+  <nav id="mainNav">
     <ul class="nav-menu">
       <li><a href="/pages/training/training.html">Training</a></li>
       <li><a href="/pages/coaches/coaches.html">Coaches</a></li>
-      <li class="has-dropdown">
-        <span>Events</span>
-        <ul class="dropdown-menu">
+      <li class="dropdown">
+        <button class="dropdown-button">Events <span class="arrow">▼</span></button>
+        <ul class="dropdown-content">
           <li><a href="/pages/ERC25/erc25.html">ERC25</a></li>
         </ul>
       </li>
@@ -27,98 +27,74 @@
   </nav>
 </header>
 
+<div id="menuOverlay" class="menu-overlay"></div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Create overlay element
-    const overlay = document.createElement('div');
-    overlay.className = 'nav-overlay';
-    document.body.appendChild(overlay);
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const dropdowns = document.querySelectorAll('.dropdown');
 
-    // Menu toggle functionality
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('nav');
+  // Toggle mobile menu
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    mainNav.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
     
-    menuToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        this.classList.toggle('active');
-        nav.classList.toggle('active');
-        overlay.classList.toggle('active');
-        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
-    });
+    // Close all dropdowns when closing menu
+    if (!mainNav.classList.contains('active')) {
+      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+    }
+  });
 
-    // Dropdown functionality
-    const dropdowns = document.querySelectorAll('.has-dropdown');
+  // Handle dropdowns
+  dropdowns.forEach(dropdown => {
+    const button = dropdown.querySelector('.dropdown-button');
     
-    dropdowns.forEach(dropdown => {
-        const dropdownToggle = dropdown.querySelector('span');
-        
-        dropdownToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // If on mobile, toggle the dropdown
-            if (window.innerWidth <= 768) {
-                // Close all other open dropdowns
-                dropdowns.forEach(otherDropdown => {
-                    if (otherDropdown !== dropdown) {
-                        otherDropdown.classList.remove('active');
-                    }
-                });
-                
-                // Toggle current dropdown
-                dropdown.classList.toggle('active');
-            }
-        });
-    });
-
-    // Close menu when clicking overlay
-    overlay.addEventListener('click', function() {
-        nav.classList.remove('active');
-        menuToggle.classList.remove('active');
-        this.classList.remove('active');
-        document.body.style.overflow = '';
-        
-        // Close all dropdowns
-        dropdowns.forEach(dropdown => {
-            dropdown.classList.remove('active');
-        });
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!nav.contains(e.target) && 
-            !menuToggle.contains(e.target) && 
-            nav.classList.contains('active')) {
-            
-            nav.classList.remove('active');
-            menuToggle.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-            
-            // Close all dropdowns
-            dropdowns.forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Close other dropdowns
+      dropdowns.forEach(other => {
+        if (other !== dropdown) {
+          other.classList.remove('active');
         }
+      });
+      
+      dropdown.classList.toggle('active');
     });
+  });
 
-    // Handle window resize
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            if (window.innerWidth > 768) {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-                
-                // Close all dropdowns
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            }
-        }, 250);
-    });
+  // Close menu and dropdowns when clicking overlay
+  menuOverlay.addEventListener('click', () => {
+    mainNav.classList.remove('active');
+    menuToggle.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+    document.body.style.overflow = '';
+  });
+
+  // Close menu and dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+      mainNav.classList.remove('active');
+      menuToggle.classList.remove('active');
+      menuOverlay.classList.remove('active');
+      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      mainNav.classList.remove('active');
+      menuToggle.classList.remove('active');
+      menuOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
 });
 </script>
