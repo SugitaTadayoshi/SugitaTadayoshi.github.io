@@ -1,16 +1,18 @@
 <!-- header.html -->
-<header>
-  <div class="header-logo">
-    <a href="/index.html">
-      <img src="/images/weblogo.png" alt="Erovra Club Logo">
-    </a>
+<header class="mobile-header">
+  <div class="mobile-header-container">
+    <div class="header-logo">
+      <a href="/index.html">
+        <img src="/images/weblogo.png" alt="Erovra Club Logo">
+      </a>
+    </div>
+    
+    <button class="menu-toggle" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  
-  <button class="menu-toggle" aria-label="Toggle navigation menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
   
   <nav>
     <ul class="nav-menu">
@@ -52,15 +54,5 @@ document.querySelector('.has-dropdown span').addEventListener('click', function(
     e.preventDefault();
     this.parentElement.classList.toggle('active');
   }
-});
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(e) {
-  const dropdowns = document.querySelectorAll('.has-dropdown');
-  dropdowns.forEach(dropdown => {
-    if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove('active');
-    }
-  });
 });
 </script>
