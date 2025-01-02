@@ -121,8 +121,9 @@ header {
 }
 
 /* Mobile menu toggle */
+/* Temporary debug style - remove after fixing */
 .menu-toggle {
-  display: none; /* Hidden by default */
+  border: 1px solid red !important;
 }
 
 /* Overlay */

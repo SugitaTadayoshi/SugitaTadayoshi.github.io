@@ -28,13 +28,23 @@
 </header>
 
 <div id="menuOverlay" class="menu-overlay"></div>
-
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script type="text/babel">
-  // Single DOMContentLoaded event listener
+  // Remove the nested DOMContentLoaded event
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Navigation script loading...'); // Debug log
-    
-    const menuToggle = document.getElementById('menuToggle');
+  console.log('Navigation script loading...'); // Debug log
+  
+  // Add these two lines here for testing
+  document.body.addEventListener('click', () => {
+    console.log('Body clicked');
+  });
+
+  const menuToggle = document.getElementById('menuToggle');
+  
+  menuToggle.addEventListener('click', () => {
+    console.log('Direct toggle click');
+  });
+  
     const mainNav = document.getElementById('mainNav');
     const menuOverlay = document.getElementById('menuOverlay');
     const dropdowns = document.querySelectorAll('.dropdown');
@@ -42,19 +52,17 @@
     console.log('Menu toggle element:', menuToggle); // Debug log
     
     // Menu toggle click handler
-    menuToggle.addEventListener('click', function(e) {
-      console.log('Menu toggle clicked'); // Debug log
-      e.preventDefault();
-      e.stopPropagation();
-      
-      this.classList.toggle('active');
-      mainNav.classList.toggle('active');
-      menuOverlay.classList.toggle('active');
-      document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
-      
-      // Close all dropdowns when toggling menu
-      dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
-    });
+    if (menuToggle) {
+      menuToggle.addEventListener('click', function(e) {
+        console.log('Menu toggle clicked'); // Debug log
+        this.classList.toggle('active');
+        mainNav.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+        
+        // Close all dropdowns when toggling menu
+        dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      });
+    }
 
   // Handle dropdowns
   dropdowns.forEach(dropdown => {
