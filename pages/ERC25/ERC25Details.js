@@ -11,30 +11,20 @@ const ERC25Details = () => {
         Date: "8-9 March 2025",
         Venue: "Home of Athletics",
         "Event Type": "Relay Championship",
-        "Registration Deadline": "February 15, 2025",
+        "Registration Deadline": "February 19, 2025",
       },
     },
     {
       id: "format",
       title: "Race Format",
       icon: "🏆",
-      content: {
-        Categories: "4x100m, 4x400m Relays",
-        Divisions: "Open, Masters, Youth",
-        "Team Size": "4-6 runners per team",
-        "Qualifying Times": "Available in full event guide",
-      },
+      pdfFile: "format.pdf",
     },
     {
       id: "schedule",
       title: "Event Schedule",
       icon: "⏰",
-      content: {
-        "Day 1 - March 8": "Heats & Preliminaries",
-        "Day 2 - March 9": "Finals & Award Ceremony",
-        "Reporting Time": "2 hours before event",
-        "Race Pack Collection": "Details in event guide",
-      },
+      pdfFile: "schedule.pdf",
     },
     {
       id: "registration",
@@ -71,13 +61,26 @@ const ERC25Details = () => {
               </div>
 
               {isActive && (
-                <div className="space-y-3 mt-4">
-                  {Object.entries(section.content).map(([key, value]) => (
-                    <div key={key} className="flex flex-col">
-                      <span className="text-sm opacity-80">{key}</span>
-                      <span className="font-medium">{value}</span>
+                <div>
+                  {section.pdfFile ? (
+                    <div className="mt-4">
+                      <iframe
+                        src={section.pdfFile}
+                        width="100%"
+                        height="400px"
+                        frameBorder="0"
+                      ></iframe>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="space-y-3 mt-4">
+                      {Object.entries(section.content).map(([key, value]) => (
+                        <div key={key} className="flex flex-col">
+                          <span className="text-sm opacity-80">{key}</span>
+                          <span className="font-medium">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -95,19 +98,6 @@ const ERC25Details = () => {
           <span className="text-xl">📥</span>
           <span>Download Full Event Guide</span>
         </a>
-      </div>
-
-      <div className="mt-8 text-center text-gray-400">
-        <p className="text-sm">Event Supported By</p>
-        <div className="flex justify-center items-center space-x-8 mt-4">
-          <img
-            src="/images/sa-logo.png"
-            alt="Singapore Athletics"
-            className="h-12"
-          />
-          <img src="/images/pocari-logo.png" alt="Pocari" className="h-12" />
-          <img src="/images/milo-logo.png" alt="Milo" className="h-12" />
-        </div>
       </div>
     </div>
   );
