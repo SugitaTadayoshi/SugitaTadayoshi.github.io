@@ -1,12 +1,9 @@
-const React = window.React;
-const { useState, useEffect } = React;
-
 const IndexContent = () => {
-  const [text, setText] = useState("");
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [completedLines, setCompletedLines] = useState([]);
-  const [typingComplete, setTypingComplete] = useState(false);
-  const [activeContent, setActiveContent] = useState("about");
+  const [text, setText] = React.useState("");
+  const [currentLineIndex, setCurrentLineIndex] = React.useState(0);
+  const [completedLines, setCompletedLines] = React.useState([]);
+  const [typingComplete, setTypingComplete] = React.useState(false);
+  const [activeContent, setActiveContent] = React.useState("about");
 
   const lines = [
     "erövra",
@@ -22,9 +19,7 @@ const IndexContent = () => {
       icon: (isActive) => (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
           <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
-            {/* 'i' dot */}
             <circle cx="50" cy="30" r="4" fill="currentColor" />
-            {/* 'i' body */}
             <rect
               x="46"
               y="40"
@@ -70,20 +65,7 @@ const IndexContent = () => {
               stroke="currentColor"
               strokeWidth="4"
             />
-            <path
-              d="M65 12 L50 45 L35 12 L50 18 Z"
-              fill="currentColor"
-              transform="rotate(30 50 50)"
-            />
-            <path
-              d="M65 14 L50 47 L35 14"
-              stroke="rgba(0,0,0,0.3)"
-              strokeWidth="2"
-              fill="none"
-              transform="rotate(30 50 50)"
-            />
             <circle cx="50" cy="50" r="4" fill="currentColor" />
-            <circle cx="51" cy="51" r="3" fill="rgba(0,0,0,0.3)" />
           </svg>
         </div>
       ),
@@ -110,17 +92,6 @@ const IndexContent = () => {
             />
             <circle cx="50" cy="50" r="10" fill="currentColor" />
             <circle cx="45" cy="45" r="4" fill={isActive ? "black" : "white"} />
-            <path
-              d="M20 40 L15 35 M30 30 L25 25 M50 25 L50 20 M70 30 L75 25 M80 40 L85 35"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <path
-              d="M35 50 A15 15 0 0 1 65 50"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-            />
           </svg>
         </div>
       ),
@@ -162,19 +133,13 @@ const IndexContent = () => {
               transform="rotate(-60 50 50)"
             />
             <circle cx="50" cy="50" r="8" fill="currentColor" />
-            <circle cx="95" cy="50" r="4" fill="currentColor" />
-            <circle cx="73" cy="89" r="4" fill="currentColor" />
-            <circle cx="27" cy="89" r="4" fill="currentColor" />
-            <circle cx="5" cy="50" r="4" fill="currentColor" />
-            <circle cx="27" cy="11" r="4" fill="currentColor" />
-            <circle cx="73" cy="11" r="4" fill="currentColor" />
           </svg>
         </div>
       ),
     },
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (currentLineIndex < lines.length) {
       let currentIndex = 0;
       const interval = setInterval(() => {
@@ -268,4 +233,5 @@ const IndexContent = () => {
   );
 };
 
+// Export the component globally
 window.IndexContent = IndexContent;
