@@ -127,21 +127,21 @@
             {
                 name: "Yio Chu Kang Stadium",
                 coordinates: { lat: 1.3715, lng: 103.8251 },
-                address: "200 Ang Mo Kio Avenue 9, Singapore 569770",
-                schedule: "Wednesday 6.30pm",
+                address: "200 Ang Mo Kio Avenue 9 \n Singapore 569770",
+                schedule: "Monday 6.30pm \n Saturday 9.00am",
                 image: "yck.jpg"
             },
             {
-                name: "Bishan Stadium",
-                coordinates: { lat: 1.3546, lng: 103.8270 },
-                address: "5 Bishan Street 14, Singapore 579783",
-                schedule: "Wednesday 6.30pm\nSaturday 9.00am",
+                name: "MOE (Evans) Stadium",
+                coordinates: { lat: 1.3386, lng: 103.8070 },
+                address: "21 Evans Rd \n Singapore 259366",
+                schedule: "Thursday 6.00pm \n Sunday 4.30pm",
                 image: "bishan.jpg"
             },
             {
                 name: "Bedok Stadium",
-                coordinates: { lat: 1.3426, lng: 103.9073 },
-                address: "3 Bedok North Street 2, Singapore 469643",
+                coordinates: { lat: 1.3426, lng: 103.9013 },
+                address: "3 Bedok North Street 2 \n Singapore 469643",
                 schedule: "Wednesday 6.30pm\nSaturday 8.00am",
                 image: "bedok.jpg"
             }
@@ -191,12 +191,12 @@
             info.style.left = `${pos.x}%`;
             info.style.top = `${pos.y}%`;
             info.innerHTML = `
-                <div class="location-image">
-                    <img src="${stadium.image}" alt="${stadium.name}">
-                </div>
-                <h3 class="text-[#DAA520] font-bold text-lg mb-2">${stadium.name}</h3>
-                <p class="text-sm text-gray-300 mb-2">${stadium.address}</p>
-                <p class="text-sm font-semibold text-white">${stadium.schedule.replace('\n', '<br>')}</p>
+            <div class="location-image">
+            <img src="${stadium.image}" alt="${stadium.name}">
+            </div>
+            <h3 class="text-[#DAA520] font-bold text-lg mb-2">${stadium.name}</h3>
+            <p class="text-sm text-gray-300 mb-2">${stadium.address.replace(/\n/g, '<br>')}</p>
+            <p class="text-sm font-semibold text-white">${stadium.schedule.replace(/\n/g, '<br>')}</p>
             `;
 
             marker.addEventListener('click', (e) => {

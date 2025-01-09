@@ -20,27 +20,14 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-            color: #fff;
+            color: rgb(255, 255, 255);
             min-height: 100vh;
-            background-image: url('erc25bg.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
-
-        .content-container {
-            min-height: 400px;
-            position: relative;
-            transition: opacity 0.3s ease;
-        }
-
-        .pdf-container {
-            width: 100%;
-            height: calc(100vh - 300px);
-            min-height: 600px;
-        }
-
+        
         .track-line {
             height: 2px;
             background: rgba(234, 179, 8, 0.2);
@@ -81,13 +68,12 @@
 
     <!-- Include the EventDetails component -->
     <!-- Load components -->
-    <script type="text/babel" src="PDFViewer.js"></script>
-    <script type="text/babel" src="EventDetails.js"></script>
+    <script type="text/babel" src="ContactPage.js"></script>
     
     <!-- Render the app -->
     <script type="text/babel">
         const root = ReactDOM.createRoot(document.getElementById('event-content'));
-        root.render(<EventDetails />);
+        root.render(<ContactDetails />);
     </script>
 
 </body>
